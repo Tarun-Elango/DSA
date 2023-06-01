@@ -1,13 +1,15 @@
 # hash table needs size(number of elements inserted), capacity - size of internal array, 
 # buckets - the internal arrays, storing each element in the bucket based on the key
 # buckets are meant to keep track of keys, each bucket is linked to the hashed key. if repeated stored as linked list
-initialCapacity = 50 # prime number
+initialCapacity = 5 # prime number
 
+
+# the below hash function makes it so only a string can be used as a key. 
 
 class Node:
     def __init__(self, key, value):
-        self.key = None
-        self.value = None
+        self.key = key
+        self.value = value
         self.next = None # part of linked list, as each bucket actually has a linked list (seperate chaining for collision resolution)
 
     
@@ -45,7 +47,7 @@ class Hashtable:
 
         # else collision and add to end of linked list
         prev = bucket # set the bucket that we are dealing with to prev
-        while prev is not None:
+        while bucket is not None:
             # take the current node, iterate to the end of (that linked list)
             prev = bucket
             bucket = bucket.next
@@ -72,9 +74,10 @@ class Hashtable:
     def remove(self, key):
         hashKey = self.hash(key)
         bucket = self.buckets[hashKey]
-
-        #find the bucket 
+        prev = None
+        #find the linked list node in the bucket and store the prev value 
         while bucket is not None and bucket.key != key: 
+            prev = bucket
             bucket= bucket.next
 
         # found the node at linked list
@@ -83,7 +86,43 @@ class Hashtable:
     
         else:
             self.size=-1
+            if prev is None:
+                bucket = None  # is prev is none,set the current bucket to empty as it doesn't matter
+
+            else:
+                prev.next = prev.next.next
             
+            return
+
+# create a sample hashtable
+ht = Hashtable()
+ht.insert("tarun",2)
+ht.insert("hello",3)
+ht.insert("hello",4)
+
+# print the entire hastable/ linked list
+arrays = ht.buckets
+for i in range(len(arrays)):
+    x = arrays[i]
+    while x is not None:
+        # print the linked list at this array position
+        print(x.key, x.value)
+        x=x.next
+        
+'''
+to summarize
+
+hash tables are comprised of key value pairs
+
+the key is first hashed, this hashed key is used to allocate a bucket for the key-value pair (the bucket being an array)
+and accordingly each key value pair is given its bucket/array according to the hash function
+
+if collision occurs the array location has a linked list and the second value is added as another node to the linked list
+'''
+
+
+
+
 
 
 
