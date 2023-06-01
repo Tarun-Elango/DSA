@@ -60,13 +60,31 @@ class Hashtable:
         bucket = self.buckets[hashedKey] # found the bucket
 
         #traverse the linked list
-        while bucket is not None and bucket.key != key:
+        while bucket is not None and bucket.key != key:   # this is because each bucket has a node with key and value.
             bucket = bucket.next
 
         if bucket is None:
             return
         else:
             return bucket.value
+        
+
+    def remove(self, key):
+        hashKey = self.hash(key)
+        bucket = self.buckets[hashKey]
+
+        #find the bucket 
+        while bucket is not None and bucket.key != key: 
+            bucket= bucket.next
+
+        # found the node at linked list
+        if bucket is None:
+            return
+    
+        else:
+            self.size=-1
+            
+
 
 
 
